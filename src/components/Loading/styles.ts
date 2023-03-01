@@ -7,6 +7,6 @@ export const Container = styled.View`
   background-color: ${({theme}) => theme.COLORS.GRAY_600};
 `
 
-export const LoadIndicator = styled.ActivityIndicator.attrs(({theme}) => ({
+export const LoadIndicator = styled.ActivityIndicator.attrs(({theme}) => ({ // usamos o attrs para definir propriedades de um componente
   color: theme.COLORS.GREEN_700
 }))``
