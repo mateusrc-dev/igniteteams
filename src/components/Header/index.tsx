@@ -7,7 +7,7 @@ type Props = {
 
 export function Header({ showBackButton = false }: Props) {
   return (
-    <Container>
+    <Container showBackButton={showBackButton}>
       {showBackButton && (
         <BackButton>
           <BackIcon />
