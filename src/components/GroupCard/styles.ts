@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { UsersThree } from "phosphor-react-native";
 
 export const Container = styled(TouchableOpacity)`
@@ -15,15 +15,18 @@ export const Container = styled(TouchableOpacity)`
 `;
 
 export const Title = styled.Text`
-  font-size: ${({ theme }) => theme.FONT_SIZE.MD}px;
-  color: ${({ theme }) => theme.COLORS.GRAY_200};
-  font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
+  ${({ theme }) => css`
+    font-size: ${theme.FONT_SIZE.MD}px;
+    color: ${theme.COLORS.GRAY_200};
+    font-family: ${theme.FONT_FAMILY.REGULAR};
+  `}
 `;
 
-export const Icon = styled(UsersThree).attrs(({theme}) => ({ // vamos estilizar as propriedades desse componente, por isso, vamos usar parênteses
+export const Icon = styled(UsersThree).attrs(({ theme }) => ({
+  // vamos estilizar as propriedades desse componente, por isso, vamos usar parênteses
   size: 32,
   color: theme.COLORS.GREEN_700,
-  weight: 'fill',
+  weight: "fill",
 }))`
   margin-right: 20px;
-`
+`;
