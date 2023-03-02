@@ -1,5 +1,6 @@
 import { StatusBar } from "react-native"
-import { Groups } from "@screens/Groups";
+// import { Groups } from "@screens/Groups";
+import { NewGroup } from "@screens/NewGroup"
 import { ThemeProvider } from "styled-components/native";
 import theme from "./src/theme";
 import {
@@ -19,7 +20,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent // para a interface da aplicação começar do topo
       />
-      {fontsLoaded ? <Groups /> : <Loading />}
+      {fontsLoaded ? <NewGroup /> : <Loading />}
     </ThemeProvider>
   );
 }
