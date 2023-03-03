@@ -1,6 +1,7 @@
-import { StatusBar } from "react-native"
-import { Groups } from "@screens/Groups";
+import { StatusBar } from "react-native";
+// import { Groups } from "@screens/Groups";
 // import { NewGroup } from "@screens/NewGroup"
+import { Players } from "@screens/Players"
 import { ThemeProvider } from "styled-components/native";
 import theme from "./src/theme";
 import {
@@ -15,12 +16,12 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar 
+      <StatusBar
         barStyle="light-content" // cor dos ícones
         backgroundColor="transparent"
         translucent // para a interface da aplicação começar do topo
       />
-      {fontsLoaded ? <Groups /> : <Loading />}
+      {fontsLoaded ? <Players /> : <Loading />}
     </ThemeProvider>
   );
 }
