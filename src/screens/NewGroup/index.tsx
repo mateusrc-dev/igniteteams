@@ -4,12 +4,18 @@ import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
 import { Container, Content, Icon } from "./styles";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 
 export function NewGroup() {
+  const [group, setGroup] = useState(""); // the initial state value is an empty string
   const navigation = useNavigation();
 
   function handleNew() {
-    navigation.navigate("players", { group: "Rocket" }); // its houter have parameter, the typescript indicate error its not insering variable 'group'
+    if (group.length !== 0) {
+      navigation.navigate("players", { group }); // its houter have parameter, the typescript indicate error its not insering parameter 'group'
+    } else {
+      alert("Escreva o nome da nova turma!");
+    }
   }
 
   return (
@@ -22,7 +28,10 @@ export function NewGroup() {
           subtitle="crie a turma para adicionar as pessoas"
         />
 
-        <Input placeholder="Nome da turma" />
+        <Input
+          placeholder="Nome da turma"
+          onChangeText={(text) => setGroup(text)}
+        />
 
         <Button title="Criar" style={{ marginTop: 20 }} onPress={handleNew} />
       </Content>
