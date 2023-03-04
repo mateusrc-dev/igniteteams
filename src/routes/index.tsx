@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native"; // COR navigatio
 import { AppRoutes } from "./app.routes";
 
 export function Routes() {
-  return (
+  return ( // this context have the navigation - routes now have navigation access in their properties
     <NavigationContainer>
       <AppRoutes />
     </NavigationContainer>
