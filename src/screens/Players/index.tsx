@@ -2,7 +2,7 @@ import { ButtonIcon } from "@components/ButtonIcon";
 import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
-import { Container, Form, HeaderList, NumbersOfPlayers } from "./styles";
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Filter } from "../../components/Filter";
 import { FlatList } from "react-native";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export function Players() {
           )}
           horizontal
         />
-        <NumbersOfPlayers>{players.length}</NumbersOfPlayers>
+        <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
       <FlatList
         data={players}
