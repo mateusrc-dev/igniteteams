@@ -9,6 +9,7 @@ import { groupCreate } from "@storage/group/groupCreate";
 import { AppError } from "@utils/AppError";
 import { Alert } from "react-native";
 
+
 export function NewGroup() {
   const [group, setGroup] = useState(""); // the initial state value is an empty string
   const navigation = useNavigation();
