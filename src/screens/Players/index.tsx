@@ -5,14 +5,16 @@ import { Input } from "@components/Input";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Filter } from "../../components/Filter";
 import { FlatList, Alert } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
 import { useRoute } from "@react-navigation/native";
 import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
-import { playersGetByGroup } from "@storage/player/playersGetByGroup";
+// import { playersGetByGroup } from "@storage/player/playersGetByGroup";
+import { playersGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
+import { PlayerStorareDTO } from "@storage/player/PlayerStorageDTO";
 
 type routeParams = {
   group: string;
@@ -21,7 +23,7 @@ type routeParams = {
 export function Players() {
   const [newPlayerName, setNewPlayerName] = useState("");
   const [team, setTeam] = useState("Time A");
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<PlayerStorareDTO[]>([]); // 'players' is a object of arrays, so is used '[]' in typing
   const route = useRoute(); // is possible acess parameters through the hook 'useRoute'
   const { group } = route.params as routeParams; // 'as' is used to indicate the type of object definition
 
@@ -34,15 +36,15 @@ export function Players() {
       );
     }
 
-    const newPlayer = { // adding player with your name and team in a specific group
+    const newPlayer = {
+      // adding player with your name and team in a specific group
       name: newPlayerName,
       team,
     };
 
     try {
       await playerAddByGroup(newPlayer, group); // function with logic the includes data the player in storage by group
-      const players = await playersGetByGroup(group);
-      console.log(players);
+      fetchPlayersByTeam() // loading listing again for show in screen
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("Nova pessoa", error.message);
@@ -52,6 +54,23 @@ export function Players() {
       }
     }
   }
+
+  async function fetchPlayersByTeam() {
+    try {
+      const playersByTeam = await playersGetByGroupAndTeam(group, team);
+      setPlayers(playersByTeam);
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        "Pessoas",
+        "Não foi possível carregar as pessoas do time selecionado!"
+      );
+    }
+  }
+
+  useEffect(() => {
+    fetchPlayersByTeam();
+  }, [team]);
 
   return (
     <Container>
@@ -83,9 +102,9 @@ export function Players() {
       </HeaderList>
       <FlatList
         data={players}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item} onRemove={() => {}} />
+          <PlayerCard name={item.name} onRemove={() => {}} />
         )}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
