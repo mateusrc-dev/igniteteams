@@ -7,8 +7,9 @@ type Props = {
   type: ButtonTypeStyleProps;
 };
 
+
+// let's use parentheses to pass a typing to the component
 export const Container = styled(TouchableOpacity)<Props>`
-  // vamos usar parênteses para poder passar uma tipagem para o componente
   flex: 1;
   min-height: 56px;
   max-height: 56px;
@@ -19,8 +20,10 @@ export const Container = styled(TouchableOpacity)<Props>`
   align-items: center;
 `;
 
+
+// we can use css to get the theme once
 export const Title = styled.Text`
-  ${({ theme }) => css` // podemos usar o css para obter o theme uma vez só
+  ${({ theme }) => css`
   font-size: ${theme.FONT_SIZE.MD}px;
   color: ${theme.COLORS.WHITE};
   font-family: ${theme.FONT_FAMILY.BOLD};

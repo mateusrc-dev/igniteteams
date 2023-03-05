@@ -13,10 +13,11 @@ export const Content = styled.View`
   justify-content: center;
 `;
 
+// align-self: center - so that the item itself goes to the center
+// let's use attrs to define the component's properties
 export const Icon = styled(UsersThree).attrs(({ theme }) => ({
-  // vamos usar o attrs para poder definir as propriedades do componente
   size: 56,
   color: theme.COLORS.GREEN_700
 }))`
-  align-self: center; // para que o item por si mesmo vá ao centro
+  align-self: center;
 `

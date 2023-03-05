@@ -17,13 +17,13 @@ export const Logo = styled.Image`
   height: 55px;
 `;
 
+// to make the icon a clickable region
 export const BackButton = styled.TouchableOpacity`
-  // para fazer com que o ícone se torna uma região clicável
   flex: 1;
 `;
 
+// we put a non-standard component in parentheses to style it - used attrs to be able to define properties of an element
 export const BackIcon = styled(CaretLeft).attrs(({ theme }) => ({
-  // colocamos entre parênteses um componente que não é padrão para estilizar ele - usamos o attrs para poder definir propriedades de um elemento
   size: 32,
   color: theme.COLORS.WHITE,
 }))``;

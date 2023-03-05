@@ -2,8 +2,9 @@ import styled, { css } from "styled-components/native";
 
 import { TextInput } from "react-native";
 
+
+// let's extend the typing, so let's use parentheses
 export const Container = styled(TextInput)`
-  // vamos estender a tipagem, por isso vamos usar o parênteses
   flex: 1;
   min-height: 56px;
   max-height: 56px;
