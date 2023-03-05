@@ -5,8 +5,9 @@ export type FilterStyleProps = {
   isActive?: boolean;
 };
 
+
+// as we are going to pass typing let's put the element in parentheses
 export const Container = styled(TouchableOpacity)<FilterStyleProps>`
-  // como vamos passar tipagem vamos colocar o elemento entre parênteses
   margin-right: 12px;
   height: 38px;
   width: 70px;
@@ -20,8 +21,9 @@ export const Container = styled(TouchableOpacity)<FilterStyleProps>`
   `}
 `;
 
+// text-transform: uppercase - to force the text to always be in uppercase
 export const Title = styled.Text`
-  text-transform: uppercase; // para forçar o texto a sempre ficar em letras maiúsculas
+  text-transform: uppercase; 
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.BOLD};
     font-size: ${theme.FONT_SIZE.SM}px;
