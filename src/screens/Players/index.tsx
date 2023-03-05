@@ -4,15 +4,14 @@ import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Filter } from "../../components/Filter";
-import { FlatList, Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { FlatList, Alert, TextInput } from "react-native";
+import { useEffect, useState, useRef } from "react";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
 import { useRoute } from "@react-navigation/native";
 import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
-// import { playersGetByGroup } from "@storage/player/playersGetByGroup";
 import { playersGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
 import { PlayerStorareDTO } from "@storage/player/PlayerStorageDTO";
 
@@ -26,6 +25,8 @@ export function Players() {
   const [players, setPlayers] = useState<PlayerStorareDTO[]>([]); // 'players' is a object of arrays, so is used '[]' in typing
   const route = useRoute(); // is possible acess parameters through the hook 'useRoute'
   const { group } = route.params as routeParams; // 'as' is used to indicate the type of object definition
+
+  const newPlayerNameInputRef = useRef<TextInput>(null);
 
   async function handleAddPlayer() {
     if (newPlayerName.trim().length === 0) {
@@ -44,6 +45,8 @@ export function Players() {
 
     try {
       await playerAddByGroup(newPlayer, group); // function with logic the includes data the player in storage by group
+      newPlayerNameInputRef.current?.blur() // 'blur' delete focus in input
+      setNewPlayerName("");
       fetchPlayersByTeam() // loading listing again for show in screen
     } catch (error) {
       if (error instanceof AppError) {
@@ -81,6 +84,10 @@ export function Players() {
           placeholder="Nome da pessoa"
           autoCorrect={false} // for the corrector not correct the content in input
           onChangeText={(text) => setNewPlayerName(text)}
+          value={newPlayerName}
+          inputRef={newPlayerNameInputRef}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
         <ButtonIcon onPress={handleAddPlayer} name="add" type="SECONDARY" />
       </Form>
