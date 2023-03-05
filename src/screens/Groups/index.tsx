@@ -2,34 +2,36 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { Container } from "./styles";
 import { GroupCard } from "@components/GroupCard";
-import { useState } from "react";
+import { useState, useCallback } from "react"; // useCallback is a hook whose purpose is to prevent a function from being executed unnecessarily
 import { FlatList } from "react-native";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
-// import { NativeStackNavigationProp } from "@react-navigation/native-stack"; // a type possible navigation
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"; // useFocusEffect identify if screen have focus
+import { groupsGetAll } from "@storage/group/groupsGetAll";
 
-/* type RootParamList = {
-  groups: undefined; // defining what routes exist in application and what parameter his routes have
-  new: undefined;
-  players: {
-    group: string;
-  };
-};
-
-type navigationProps = {
-  navigation: NativeStackNavigationProp<RootParamList, "groups">;
-}; */
-
-export function Groups(/*{ navigation }: navigationProps*/) {
+export function Groups() {
   // props have mothod navigation
-  const [groups, setGroups] = useState<string[]>(["Maria Clara", "Mateus"]);
-  const navigation = useNavigation() // instancing this hook in memory
+  const [groups, setGroups] = useState<string[]>([]);
+  const navigation = useNavigation(); // instancing this hook in memory
 
   function handleNewGroup() {
-    navigation.navigate('new') // in object navigation have method navigate - create navigation in pages
-    // navigation.navigate("new");
+    navigation.navigate("new"); // in object navigation have method navigate - create navigation in pages
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchGroups() {
+        try {
+          const getGroups = await groupsGetAll();
+          setGroups(getGroups);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      console.log("useFocusEffect executou!");
+      fetchGroups();
+    }, [])
+  );
 
   return (
     <Container>

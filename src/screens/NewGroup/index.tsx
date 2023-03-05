@@ -3,16 +3,22 @@ import { Header } from "@components/Header";
 import { Highlight } from "@components/Highlight";
 import { Input } from "@components/Input";
 import { Container, Content, Icon } from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native"; 
 import { useState } from "react";
+import { groupCreate } from "@storage/group/groupCreate";
 
 export function NewGroup() {
   const [group, setGroup] = useState(""); // the initial state value is an empty string
   const navigation = useNavigation();
 
-  function handleNew() {
+  async function handleNew() {
     if (group.length !== 0) {
-      navigation.navigate("players", { group }); // its houter have parameter, the typescript indicate error its not insering parameter 'group'
+      try {
+        await groupCreate(group); // calling function that saves data to storage
+        navigation.navigate("players", { group }); // its houter have parameter, the typescript indicate error its not insering parameter 'group'
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       alert("Escreva o nome da nova turma!");
     }
