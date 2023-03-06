@@ -14,6 +14,7 @@ import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
 import { playersGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
 import { PlayerStorareDTO } from "@storage/player/PlayerStorageDTO";
+import { PlayerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
 
 type routeParams = {
   group: string;
@@ -45,9 +46,9 @@ export function Players() {
 
     try {
       await playerAddByGroup(newPlayer, group); // function with logic the includes data the player in storage by group
-      newPlayerNameInputRef.current?.blur() // 'blur' delete focus in input
+      newPlayerNameInputRef.current?.blur(); // 'blur' delete focus in input
       setNewPlayerName("");
-      fetchPlayersByTeam() // loading listing again for show in screen
+      fetchPlayersByTeam(); // loading listing again for show in screen
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("Nova pessoa", error.message);
@@ -55,6 +56,16 @@ export function Players() {
         console.log(error);
         Alert.alert("Nova pessoa", "Não foi possível adicionar!");
       }
+    }
+  }
+
+  async function handleRemovePlayer(playerName: string) {
+    try {
+      await PlayerRemoveByGroup(playerName, group); // delete player especificed in parameter
+      fetchPlayersByTeam(); // loading listing again for show in screen
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover pessoa", "Não foi possível remover essa pessoa!");
     }
   }
 
@@ -111,7 +122,10 @@ export function Players() {
         data={players}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item.name} onRemove={() => {}} />
+          <PlayerCard
+            name={item.name}
+            onRemove={() => handleRemovePlayer(item.name)}
+          />
         )}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
