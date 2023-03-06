@@ -9,12 +9,13 @@ import { useEffect, useState, useRef } from "react";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { AppError } from "@utils/AppError";
 import { playerAddByGroup } from "@storage/player/playerAddByGroup";
 import { playersGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
 import { PlayerStorareDTO } from "@storage/player/PlayerStorageDTO";
 import { PlayerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
+import { groupRemoveByName } from "@storage/group/groupRemoveByName";
 
 type routeParams = {
   group: string;
@@ -26,6 +27,7 @@ export function Players() {
   const [players, setPlayers] = useState<PlayerStorareDTO[]>([]); // 'players' is a object of arrays, so is used '[]' in typing
   const route = useRoute(); // is possible acess parameters through the hook 'useRoute'
   const { group } = route.params as routeParams; // 'as' is used to indicate the type of object definition
+  const navigation = useNavigation(); // instancing this hook in memory
 
   const newPlayerNameInputRef = useRef<TextInput>(null);
 
@@ -67,6 +69,23 @@ export function Players() {
       console.log(error);
       Alert.alert("Remover pessoa", "Não foi possível remover essa pessoa!");
     }
+  }
+
+  async function groupRemove() {
+    try {
+      await groupRemoveByName(group);
+      navigation.navigate("groups"); // in object navigation have method navigate - create navigation in pages
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Remover grupo", "Não foi possível deletar este grupo!");
+    }
+  }
+
+  async function handleGroupRemove() {
+    Alert.alert("Remover", "Deseja remover o grupo?", [
+      { text: "Não", style: "cancel" },
+      { text: "Sim", onPress: () => groupRemove() },
+    ]);
   }
 
   async function fetchPlayersByTeam() {
@@ -136,7 +155,11 @@ export function Players() {
           <ListEmpty message="Não há pessoas nesse time!" />
         )}
       />
-      <Button title="Remover turma" type="SECONDARY" />
+      <Button
+        title="Remover turma"
+        type="SECONDARY"
+        onPress={handleGroupRemove}
+      />
     </Container>
   );
 }
