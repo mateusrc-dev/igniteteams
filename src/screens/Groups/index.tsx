@@ -8,10 +8,12 @@ import { ListEmpty } from "@components/ListEmpty";
 import { Button } from "@components/Button";
 import { useNavigation, useFocusEffect } from "@react-navigation/native"; // useFocusEffect identify if screen have focus
 import { groupsGetAll } from "@storage/group/groupsGetAll";
+import { Loading } from "@components/Loading";
 
 export function Groups() {
   // props have mothod navigation
   const [groups, setGroups] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation(); // instancing this hook in memory
 
   function handleNewGroup() {
@@ -26,10 +28,13 @@ export function Groups() {
     useCallback(() => {
       async function fetchGroups() {
         try {
+          setIsLoading(true);
           const getGroups = await groupsGetAll();
           setGroups(getGroups);
         } catch (error) {
           console.log(error);
+        } finally { // independenty if result success or error in fetch the groups, the loading stop
+          setIsLoading(false);
         }
       }
       fetchGroups();
@@ -40,21 +45,25 @@ export function Groups() {
     <Container>
       <Header />
       <Highlight title="Turmas" subtitle="jogue com a sua turma" />
-      <FlatList
-        data={groups}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
-          <GroupCard onPress={() => handleOpenGroup(item)} title={item} />
-        )}
-        contentContainerStyle={groups.length === 0 && { flex: 1 }}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={() => (
-          <ListEmpty message="Que tal cadastrar a primeira turma?" />
-        )}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={groups}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => (
+            <GroupCard onPress={() => handleOpenGroup(item)} title={item} />
+          )}
+          contentContainerStyle={groups.length === 0 && { flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Que tal cadastrar a primeira turma?" />
+          )}
+        />
+      )}
 
       <Button
-        title="Criar nova turma!"
+        title="Criar nova turma"
         onPress={handleNewGroup}
         // type="SECONDARY"
       />
